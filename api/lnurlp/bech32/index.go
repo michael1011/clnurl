@@ -3,6 +3,7 @@ package bech32
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/btcsuite/btcutil/bech32"
 	"github.com/michael1011/clnurl/api/_pkg/utils"
@@ -25,5 +26,5 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	utils.SetJsonHeader(w)
 	w.WriteHeader(http.StatusOK)
-	_ = json.NewEncoder(w).Encode(lnurl)
+	_ = json.NewEncoder(w).Encode(strings.ToUpper(lnurl))
 }
