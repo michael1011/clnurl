@@ -13,12 +13,11 @@ type errorResponse struct {
 }
 
 func FormatError(w http.ResponseWriter, statusCode int, err error) {
-	errJs, _ := json.Marshal(errorResponse{
+	SetJsonHeader(w)
+	w.WriteHeader(statusCode)
+
+	_ = json.NewEncoder(w).Encode(errorResponse{
 		Status: errorStatus,
 		Reason: err.Error(),
 	})
-
-	SetJsonHeader(w)
-	w.WriteHeader(statusCode)
-	w.Write(errJs)
 }

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/fiatjaf/makeinvoice"
 	"github.com/michael1011/clnurl/clnurl"
@@ -11,6 +12,9 @@ import (
 )
 
 const (
+	envEndpoint           = "ENDPOINT"
+	envInvoiceDescription = "INVOICE_DESCRIPTION"
+
 	envMinSendable = "MIN_SENDABLE"
 	envMaxSendable = "MAX_SENDABLE"
 
@@ -30,6 +34,9 @@ func GetConfig() *clnurl.Config {
 		return val == 0
 	}
 
+	parseString := func(val string) (string, error) { return val, nil }
+	isEmptyString := func(val string) bool { return val == "" }
+
 	return &clnurl.Config{
 		MinSendable: getEnvVarOptional[int64](
 			envMinSendable,
@@ -42,6 +49,18 @@ func GetConfig() *clnurl.Config {
 			consts.MaxSendable,
 			parseInt64,
 			isEmptyInt64,
+		),
+		Endpoint: strings.TrimSuffix(getEnvVarOptional[string](
+			envEndpoint,
+			consts.Endpoint,
+			parseString,
+			isEmptyString,
+		), "/"),
+		InvoiceDescription: getEnvVarOptional[string](
+			envInvoiceDescription,
+			consts.InvoiceDescription,
+			parseString,
+			isEmptyString,
 		),
 	}
 }

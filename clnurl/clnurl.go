@@ -6,21 +6,6 @@ import (
 	"github.com/fiatjaf/makeinvoice"
 )
 
-type Config struct {
-	MinSendable int64
-	MaxSendable int64
-}
-
-type ClnUrl struct {
-	cfg     *Config
-	backend makeinvoice.BackendParams
-}
-
-type InvoiceResponse struct {
-	Invoice string   `json:"pr"`
-	Routes  []string `json:"routes"`
-}
-
 func Init(cfg *Config, backend makeinvoice.BackendParams) *ClnUrl {
 	return &ClnUrl{
 		cfg:     cfg,
@@ -39,8 +24,10 @@ func (cu *ClnUrl) MakeInvoice(msats int64) (*InvoiceResponse, error) {
 	}
 
 	invoice, err := makeinvoice.MakeInvoice(makeinvoice.Params{
-		Msatoshi: msats,
-		Backend:  cu.backend,
+		Msatoshi:           msats,
+		Backend:            cu.backend,
+		Description:        cu.getMetaData(),
+		UseDescriptionHash: true,
 	})
 	if err != nil {
 		return nil, err
