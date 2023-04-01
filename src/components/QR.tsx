@@ -1,10 +1,11 @@
 import { useQRCode } from "next-qrcode";
 
 type Props = {
+  size?: number;
   content: string;
 };
 
-export default function QR({ content }: Props) {
+export default function QR({ content, size }: Props) {
   const { Canvas } = useQRCode();
 
   return (
@@ -12,9 +13,7 @@ export default function QR({ content }: Props) {
       text={content}
       options={{
         margin: 2,
-        width: 200,
-        color: {
-        },
+        width: size || 200,
       }}
     />
   );

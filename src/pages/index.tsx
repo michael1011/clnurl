@@ -43,7 +43,9 @@ export default function Home({ lnurl, invoiceUrl, description, limits }: Props) 
         <h1>{description}</h1>
         <QR content={lnurl}/>
 
-        <InvoiceFetcher invoiceUrl={invoiceUrl} limits={limits} />
+        <div className={styles.invoiceFetcher}>
+          <InvoiceFetcher invoiceUrl={invoiceUrl} limits={limits} />
+        </div>
       </main>
     </ThemeProvider>
   )

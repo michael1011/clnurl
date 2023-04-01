@@ -15,7 +15,7 @@ export default function InvoiceFetcher({ invoiceUrl, limits }: Props) {
   const [invoice, setInvoice] = useState<string | null>(null);
   const [amount, setAmount] = useState<number | null>(null);
   const [inputError, setInputError] = useState<string | null>(null);
-  
+
   const validateInput = (newAmount: number | null) => {
     if (newAmount === null || Number.isNaN(newAmount)) {
       setInputError('Amount has to be set');
@@ -61,16 +61,18 @@ export default function InvoiceFetcher({ invoiceUrl, limits }: Props) {
             validateInput((val.target as any).valueAsNumber * msatFactor);
           }}
         />
-        <Button
-          variant='contained'
-          onClick={fetchInvoice}
-          disabled={inputError !== null}
-        >
-          Fetch Invoice
-        </Button>
+        <div className={styles.buttonContainer}>
+          <Button
+            variant='contained'
+            onClick={fetchInvoice}
+            disabled={inputError !== null}
+          >
+            Fetch Invoice
+          </Button>
+        </div>
 
       </div>
-      { invoice ? <Invoice invoice={invoice}/> : <></>}
+      {invoice ? <Invoice invoice={invoice}/> : <></>}
     </div>
     )
   }
