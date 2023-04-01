@@ -1,4 +1,5 @@
 import QR from "./QR";
+import styles from '@/styles/Invoice.module.css'
 
 type Props = {
   invoice: string;
@@ -6,9 +7,9 @@ type Props = {
 
 export default function Invoice({ invoice }: Props) {
   return (
-    <div>
-      <p style={{ maxWidth: '100px'}}>{invoice}</p>
+    <div className={styles.container}>
       <QR content={invoice}/>
+      <p className={styles.invoice}>{invoice}</p>
     </div>
   );
 }

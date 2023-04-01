@@ -1,42 +1,38 @@
 import Head from 'next/head'
 import { Inter } from 'next/font/google'
-import Button from '@mui/material/Button'
+import { purple } from '@mui/material/colors';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import QR from '@/components/QR'
-import { useState } from 'react';
-import Invoice from '@/components/Invoice';
+import { Limits } from '@/utils/types';
 import styles from '@/styles/Home.module.css'
-import { defaultDescription, invoicePath, lightningPrefix, lnurlPath } from '@/utils/consts'
+import InvoiceFetcher from '@/components/InvoiceFetcher';
+import { defaultDescription, defaultMaxSendable, defaultMinSendable, invoicePath, lightningPrefix, lnurlPath } from '@/utils/consts'
 
 const inter = Inter({ subsets: ['latin'] })
 
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
+    primary: {
+      main: purple[800],
+    },
   },
+  typography: {
+    button: {
+      textTransform: 'none',
+    },
+  }
 });
 
 type Props = {
   lnurl: string;
+  limits: Limits;
   invoiceUrl: string;
   description: string;
 }
 
-export default function Home({ lnurl, invoiceUrl, description }: Props) {
-  const [invoice, setInvoice] = useState<string | null>(null);
-
-  // TODO: input for amount
-  const [amount, setAmount] = useState<number>(10000);
-
-  const fetchInvoice = async () => {
-    // TODO: handle error
-    const res = await fetch(`${invoiceUrl}?amount=${amount}`);
-    const { pr } = await res.json();
-
-    setInvoice(pr);
-  };
-  
+export default function Home({ lnurl, invoiceUrl, description, limits }: Props) {
   return (
     <ThemeProvider theme={darkTheme}>
       <Head>
@@ -47,8 +43,7 @@ export default function Home({ lnurl, invoiceUrl, description }: Props) {
         <h1>{description}</h1>
         <QR content={lnurl}/>
 
-        <Button variant='contained' onClick={fetchInvoice}>Fetch Invoice</Button>
-        { invoice ? <Invoice invoice={invoice}/> : <></>}
+        <InvoiceFetcher invoiceUrl={invoiceUrl} limits={limits} />
       </main>
     </ThemeProvider>
   )
@@ -71,9 +66,13 @@ export async function getServerSideProps(
 
   return {
     props: {
-      lnurl: `${lightningPrefix}${await lnurlRes.json()}`,
       invoiceUrl: `${endpoint}${invoicePath}`,
+      lnurl: `${lightningPrefix}${await lnurlRes.json()}`,
       description: process.env.INVOICE_DESCRIPTION || defaultDescription,
+      limits: {
+        min: Number(process.env.MIN_SENDABLE || defaultMinSendable),
+        max: Number(process.env.MAX_SENDABLE || defaultMaxSendable)
+      }
     },
   };
 }
