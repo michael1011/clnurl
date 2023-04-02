@@ -1,15 +1,22 @@
-import Head from 'next/head'
-import { Inter } from 'next/font/google'
+import Head from 'next/head';
+import { Inter } from 'next/font/google';
 import { purple } from '@mui/material/colors';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import QR from '@/components/QR'
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import { Limits } from '@/utils/types';
-import styles from '@/styles/Home.module.css'
+import Invoice from '@/components/Invoice';
+import styles from '@/styles/Home.module.css';
 import InvoiceFetcher from '@/components/InvoiceFetcher';
-import { defaultDescription, defaultMaxSendable, defaultMinSendable, invoicePath, lightningPrefix, lnurlPath } from '@/utils/consts'
+import {
+  lnurlPath,
+  invoicePath,
+  lightningPrefix,
+  defaultDescription,
+  defaultMaxSendable,
+  defaultMinSendable,
+} from '@/utils/consts';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 const darkTheme = createTheme({
   palette: {
@@ -32,7 +39,9 @@ type Props = {
   description: string;
 }
 
-export default function Home({ lnurl, invoiceUrl, description, limits }: Props) {
+export default function Home({
+  lnurl, invoiceUrl, description, limits
+}: Props) {
   return (
     <ThemeProvider theme={darkTheme}>
       <Head>
@@ -41,14 +50,14 @@ export default function Home({ lnurl, invoiceUrl, description, limits }: Props) 
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
         <h1>{description}</h1>
-        <QR content={lnurl}/>
+        <Invoice invoice={`${lightningPrefix}${lnurl}`} invoiceText={lnurl}/>
 
         <div className={styles.invoiceFetcher}>
           <InvoiceFetcher invoiceUrl={invoiceUrl} limits={limits} />
         </div>
       </main>
     </ThemeProvider>
-  )
+  );
 }
 
 export async function getServerSideProps(
@@ -57,19 +66,19 @@ export async function getServerSideProps(
   res.setHeader(
     'Cache-Control',
     'public, s-maxage=3600, stale-while-revalidate=59'
-  )
+  );
   
   let endpoint = process.env.ENDPOINT!;
   if (endpoint.endsWith('/')) {
     endpoint = endpoint.slice(0, -1);
   }
 
-  const lnurlRes = await fetch(`${endpoint}${lnurlPath}`)
+  const lnurlRes = await fetch(`${endpoint}${lnurlPath}`);
 
   return {
     props: {
       invoiceUrl: `${endpoint}${invoicePath}`,
-      lnurl: `${lightningPrefix}${await lnurlRes.json()}`,
+      lnurl: await lnurlRes.json(),
       description: process.env.INVOICE_DESCRIPTION || defaultDescription,
       limits: {
         min: Number(process.env.MIN_SENDABLE || defaultMinSendable),

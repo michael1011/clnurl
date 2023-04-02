@@ -1,10 +1,10 @@
 import { useState } from "react";
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 import { Limits } from "@/utils/types";
 import Invoice from "@/components/Invoice";
-import { msatFactor } from "@/utils/consts";
-import styles from '@/styles/InvoiceFetcher.module.css'
+import { lightningPrefix, msatFactor } from "@/utils/consts";
+import styles from '@/styles/InvoiceFetcher.module.css';
 
 type Props = {
   limits: Limits;
@@ -72,8 +72,11 @@ export default function InvoiceFetcher({ invoiceUrl, limits }: Props) {
         </div>
 
       </div>
-      {invoice ? <Invoice invoice={invoice}/> : <></>}
+      {invoice ? <Invoice
+        invoiceText={invoice}
+        invoice={`${lightningPrefix}${invoice}`}
+      /> : null}
     </div>
-    )
-  }
+  );
+}
   
