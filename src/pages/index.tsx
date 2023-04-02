@@ -1,8 +1,9 @@
 import Head from 'next/head';
 import { Inter } from 'next/font/google';
+import { useEffect, useState } from 'react';
+import { GetStaticPropsResult } from 'next';
 import { purple } from '@mui/material/colors';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import { Limits } from '@/utils/types';
 import Invoice from '@/components/Invoice';
 import styles from '@/styles/Home.module.css';
@@ -32,15 +33,23 @@ const darkTheme = createTheme({
 });
 
 type Props = {
-  lnurl: string;
   limits: Limits;
-  invoiceUrl: string;
   description: string;
+  lnurlEndpoint: string;
+  invoiceEndpoint: string;
 }
 
 export default function Home({
-  lnurl, invoiceUrl, description, limits
+  lnurlEndpoint, invoiceEndpoint, description, limits
 }: Props) {
+  const [lnurl, setLnurl] = useState(null);
+  
+  useEffect(() => {
+    fetch(lnurlEndpoint)
+      .then((res) => res.json())
+      .then((res) => setLnurl(res));
+  }, [lnurlEndpoint]);
+
   return (
     <ThemeProvider theme={darkTheme}>
       <Head>
@@ -49,35 +58,32 @@ export default function Home({
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
         <h1>{description}</h1>
-        <Invoice invoice={lnurl}/>
+        { lnurl !== null ?
+          <>
+            <Invoice invoice={lnurl}/>
 
-        <div className={styles.invoiceFetcher}>
-          <InvoiceFetcher invoiceUrl={invoiceUrl} limits={limits} />
-        </div>
+            <div className={styles.invoiceFetcher}>
+              <InvoiceFetcher
+                limits={limits}
+                invoiceEndpoint={invoiceEndpoint}
+              />
+            </div>
+          </> : null} 
       </main>
     </ThemeProvider>
   );
 }
 
-export async function getServerSideProps(
-  { res }: GetServerSidePropsContext,
-): Promise<GetServerSidePropsResult<Props>> {
-  res.setHeader(
-    'Cache-Control',
-    'public, s-maxage=3600, stale-while-revalidate=59'
-  );
-  
+export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
   let endpoint = process.env.ENDPOINT!;
   if (endpoint.endsWith('/')) {
     endpoint = endpoint.slice(0, -1);
   }
 
-  const lnurlRes = await fetch(`${endpoint}${lnurlPath}`);
-
   return {
     props: {
-      invoiceUrl: `${endpoint}${invoicePath}`,
-      lnurl: await lnurlRes.json(),
+      lnurlEndpoint: `${endpoint}${lnurlPath}`,
+      invoiceEndpoint: `${endpoint}${invoicePath}`,
       description: process.env.INVOICE_DESCRIPTION || defaultDescription,
       limits: {
         min: Number(process.env.MIN_SENDABLE || defaultMinSendable),

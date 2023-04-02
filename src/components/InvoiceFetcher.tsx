@@ -8,10 +8,10 @@ import styles from '@/styles/InvoiceFetcher.module.css';
 
 type Props = {
   limits: Limits;
-  invoiceUrl: string;
+  invoiceEndpoint: string;
 };
 
-export default function InvoiceFetcher({ invoiceUrl, limits }: Props) {
+export default function InvoiceFetcher({ invoiceEndpoint, limits }: Props) {
   const [invoice, setInvoice] = useState<string | null>(null);
   const [amount, setAmount] = useState<number | null>(null);
   const [inputError, setInputError] = useState<string | null>(null);
@@ -42,7 +42,9 @@ export default function InvoiceFetcher({ invoiceUrl, limits }: Props) {
       return;
     }
     
-    const res = await fetch(`${invoiceUrl}?amount=${amount}`);
+    const res = await fetch(
+      `${invoiceEndpoint}?amount=${encodeURIComponent(amount)}`,
+    );
     const { pr } = await res.json();
     
     setInvoice(pr);
