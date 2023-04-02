@@ -10,7 +10,6 @@ import InvoiceFetcher from '@/components/InvoiceFetcher';
 import {
   lnurlPath,
   invoicePath,
-  lightningPrefix,
   defaultDescription,
   defaultMaxSendable,
   defaultMinSendable,
@@ -50,7 +49,7 @@ export default function Home({
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
         <h1>{description}</h1>
-        <Invoice invoice={`${lightningPrefix}${lnurl}`} invoiceText={lnurl}/>
+        <Invoice invoice={lnurl}/>
 
         <div className={styles.invoiceFetcher}>
           <InvoiceFetcher invoiceUrl={invoiceUrl} limits={limits} />

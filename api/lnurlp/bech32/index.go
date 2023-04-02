@@ -24,7 +24,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.SetJsonHeader(w)
+	utils.SetHeaders(w)
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(strings.ToUpper(lnurl))
 }

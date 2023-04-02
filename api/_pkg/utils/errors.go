@@ -13,7 +13,7 @@ type errorResponse struct {
 }
 
 func FormatError(w http.ResponseWriter, statusCode int, err error) {
-	SetJsonHeader(w)
+	SetHeaders(w)
 	w.WriteHeader(statusCode)
 
 	_ = json.NewEncoder(w).Encode(errorResponse{

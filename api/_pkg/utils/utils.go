@@ -2,6 +2,7 @@ package utils
 
 import "net/http"
 
-func SetJsonHeader(w http.ResponseWriter) {
+func SetHeaders(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 }

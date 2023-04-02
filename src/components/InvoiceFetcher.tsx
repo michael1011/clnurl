@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { Limits } from "@/utils/types";
 import Invoice from "@/components/Invoice";
-import { lightningPrefix, msatFactor } from "@/utils/consts";
+import { msatFactor } from "@/utils/consts";
 import styles from '@/styles/InvoiceFetcher.module.css';
 
 type Props = {
@@ -73,8 +73,7 @@ export default function InvoiceFetcher({ invoiceUrl, limits }: Props) {
 
       </div>
       {invoice ? <Invoice
-        invoiceText={invoice}
-        invoice={`${lightningPrefix}${invoice}`}
+        invoice={invoice}
       /> : null}
     </div>
   );
