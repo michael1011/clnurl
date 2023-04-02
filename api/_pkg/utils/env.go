@@ -88,6 +88,15 @@ func GetClnBackend() (*makeinvoice.CommandoParams, error) {
 	}, nil
 }
 
+func GetCu() (*clnurl.ClnUrl, error) {
+	backend, err := GetClnBackend()
+	if err != nil {
+		return nil, err
+	}
+
+	return clnurl.Init(GetConfig(), &MakeInvoiceBackend{mkBackend: *backend}), nil
+}
+
 func getEnvVar(key string) (string, error) {
 	val := os.Getenv(key)
 

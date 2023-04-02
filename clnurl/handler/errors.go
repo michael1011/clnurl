@@ -1,4 +1,4 @@
-package utils
+package handler
 
 import (
 	"encoding/json"
@@ -12,8 +12,8 @@ type errorResponse struct {
 	Reason string `json:"reason"`
 }
 
-func FormatError(w http.ResponseWriter, statusCode int, err error) {
-	SetHeaders(w)
+func formatError(w http.ResponseWriter, statusCode int, err error) {
+	setHeaders(w)
 	w.WriteHeader(statusCode)
 
 	_ = json.NewEncoder(w).Encode(errorResponse{

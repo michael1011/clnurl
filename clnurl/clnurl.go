@@ -2,11 +2,9 @@ package clnurl
 
 import (
 	"fmt"
-
-	"github.com/fiatjaf/makeinvoice"
 )
 
-func Init(cfg *Config, backend makeinvoice.BackendParams) *ClnUrl {
+func Init(cfg *Config, backend Backend) *ClnUrl {
 	return &ClnUrl{
 		cfg:     cfg,
 		backend: backend,
@@ -23,12 +21,7 @@ func (cu *ClnUrl) MakeInvoice(msats int64) (*InvoiceResponse, error) {
 		)
 	}
 
-	invoice, err := makeinvoice.MakeInvoice(makeinvoice.Params{
-		Msatoshi:           msats,
-		Backend:            cu.backend,
-		Description:        cu.getMetaData(),
-		UseDescriptionHash: true,
-	})
+	invoice, err := cu.backend.MakeInvoice(msats, cu.getMetaData())
 	if err != nil {
 		return nil, err
 	}

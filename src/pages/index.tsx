@@ -75,7 +75,7 @@ export default function Home({
 }
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
-  let endpoint = process.env.ENDPOINT!;
+  let endpoint = process.env.ENDPOINT || '';
   if (endpoint.endsWith('/')) {
     endpoint = endpoint.slice(0, -1);
   }

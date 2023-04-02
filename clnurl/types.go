@@ -1,7 +1,5 @@
 package clnurl
 
-import "github.com/fiatjaf/makeinvoice"
-
 const (
 	tagPayRequest LnurlTag = "payRequest"
 )
@@ -15,9 +13,13 @@ type Config struct {
 	MaxSendable        int64
 }
 
+type Backend interface {
+	MakeInvoice(msats int64, description string) (string, error)
+}
+
 type ClnUrl struct {
 	cfg     *Config
-	backend makeinvoice.BackendParams
+	backend Backend
 }
 
 type InvoiceResponse struct {

@@ -2,13 +2,16 @@ module github.com/michael1011/clnurl
 
 go 1.20
 
-require github.com/fiatjaf/makeinvoice v1.5.3
+require (
+	github.com/btcsuite/btcutil v1.0.3-0.20210527170813-e2ba6805a890
+	github.com/elementsproject/glightning v0.0.0-20221013194807-73978c84cee8
+	github.com/fiatjaf/makeinvoice v1.5.3
+)
 
 require (
 	github.com/aead/siphash v1.0.1 // indirect
 	github.com/btcsuite/btcd v0.22.0-beta.0.20211005184431-e3449998be39 // indirect
 	github.com/btcsuite/btclog v0.0.0-20170628155309-84c8d2346e9f // indirect
-	github.com/btcsuite/btcutil v1.0.3-0.20210527170813-e2ba6805a890 // indirect
 	github.com/btcsuite/btcutil/psbt v1.0.3-0.20210527170813-e2ba6805a890 // indirect
 	github.com/btcsuite/btcwallet v0.13.0 // indirect
 	github.com/btcsuite/btcwallet/wallet/txauthor v1.1.0 // indirect
@@ -18,7 +21,6 @@ require (
 	github.com/btcsuite/btcwallet/wtxmgr v1.3.1-0.20210822222949-9b5a201c344c // indirect
 	github.com/btcsuite/go-socks v0.0.0-20170105172521-4720035b7bfd // indirect
 	github.com/btcsuite/websocket v0.0.0-20150119174127-31079b680792 // indirect
-	github.com/cosmos/btcutil v1.0.5 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/decred/dcrd/lru v1.0.0 // indirect
 	github.com/fiatjaf/eclair-go v0.2.1 // indirect

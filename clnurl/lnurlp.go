@@ -3,6 +3,8 @@ package clnurl
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/btcsuite/btcutil/bech32"
+	"strings"
 )
 
 const (
@@ -29,4 +31,18 @@ func (cu *ClnUrl) GetLnurlp() (Lnurlp, error) {
 		Metadata:    cu.getMetaData(),
 		Callback:    fmt.Sprintf("%s/api/invoice", cu.cfg.Endpoint),
 	}, nil
+}
+
+func (cu *ClnUrl) GetLnurlpBech32() (string, error) {
+	bits, err := bech32.ConvertBits([]byte(cu.cfg.Endpoint+"/api/lnurlp"), 8, 5, true)
+	if err != nil {
+		return "", err
+	}
+
+	lnurl, err := bech32.Encode("LNURL", bits)
+	if err != nil {
+		return "", err
+	}
+
+	return strings.ToUpper(lnurl), nil
 }
