@@ -40,21 +40,13 @@ func onInit(plugin *glightning.Plugin, _ map[string]glightning.Option, config *g
 	nodeBackend := &NodeBackend{lightning: ln}
 	cu = clnurl.Init(cfg.cu, nodeBackend)
 
-	mux := http.NewServeMux()
-
-	if cfg.ServeSite {
-		mux.Handle("/", assetHandler())
-	}
-
-	registerRoutes(mux)
-
 	addr := cfg.Host + ":" + strconv.Itoa(cfg.Port)
 	plugin.Log("Starting HTTP server on: "+addr, glightning.Info)
 
 	go func() {
 		err := http.ListenAndServe(
 			addr,
-			mux,
+			registerRoutes(cfg),
 		)
 		if err != nil {
 			plugin.Log("Starting HTTP server failed: "+err.Error(), glightning.Info)
