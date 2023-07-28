@@ -1,7 +1,8 @@
 package utils
 
 import (
-	"errors"
+	"fmt"
+	"github.com/michael1011/clnurl/api/_pkg/utils/breez"
 	"os"
 	"strconv"
 	"strings"
@@ -12,6 +13,14 @@ import (
 )
 
 const (
+	backendOptionBreez = "breez"
+
+	postgresQueryExecMode = "?default_query_exec_mode=simple_protocol"
+
+	/*
+		Environment variables
+	*/
+
 	envEndpoint           = "ENDPOINT"
 	envInvoiceDescription = "INVOICE_DESCRIPTION"
 
@@ -21,9 +30,14 @@ const (
 	envClnNodeId = "CLN_NODE_ID"
 	envClnRune   = "CLN_RUNE"
 	envClnHost   = "CLN_HOST"
-)
 
-var ErrMissingEnv = errors.New("env variable missing")
+	envBackend = "BACKEND"
+
+	envPostgresUrl = "POSTGRES_URL"
+
+	envBreezApiKey   = "BREEZ_API_KEY"
+	envBreezMnemonic = "BREEZ_MNEOMINC"
+)
 
 func GetConfig() *clnurl.Config {
 	parseInt64 := func(val string) (int64, error) {
@@ -65,7 +79,7 @@ func GetConfig() *clnurl.Config {
 	}
 }
 
-func GetClnBackend() (*makeinvoice.CommandoParams, error) {
+func getClnBackend() (*makeinvoice.CommandoParams, error) {
 	nodeId, err := getEnvVar(envClnNodeId)
 	if err != nil {
 		return nil, err
@@ -88,20 +102,59 @@ func GetClnBackend() (*makeinvoice.CommandoParams, error) {
 	}, nil
 }
 
-func GetCu() (*clnurl.ClnUrl, error) {
-	backend, err := GetClnBackend()
+func getBreezBackend() (*breez.Backend, error) {
+	postgres, err := getEnvVar(envPostgresUrl)
 	if err != nil {
 		return nil, err
 	}
 
-	return clnurl.Init(GetConfig(), &MakeInvoiceBackend{mkBackend: *backend}), nil
+	if !strings.HasSuffix(postgres, postgresQueryExecMode) {
+		postgres += postgresQueryExecMode
+	}
+
+	mnemonic, err := getEnvVar(envBreezMnemonic)
+	if err != nil {
+		return nil, err
+	}
+
+	apiKey, err := getEnvVar(envBreezApiKey)
+	if err != nil {
+		return nil, err
+	}
+
+	return breez.Init(postgres, mnemonic, apiKey)
+}
+
+func GetCu(needsNode bool) (*clnurl.ClnUrl, error) {
+	var backend clnurl.Backend
+
+	if needsNode {
+		backendOption := os.Getenv(envBackend)
+
+		if strings.EqualFold(backendOption, backendOptionBreez) {
+			var err error
+			backend, err = getBreezBackend()
+			if err != nil {
+				return nil, err
+			}
+
+		} else {
+			cln, err := getClnBackend()
+			if err != nil {
+				return nil, err
+			}
+			backend = &MakeInvoiceBackend{mkBackend: *cln}
+		}
+	}
+
+	return clnurl.Init(GetConfig(), backend), nil
 }
 
 func getEnvVar(key string) (string, error) {
 	val := os.Getenv(key)
 
 	if val == "" {
-		return "", ErrMissingEnv
+		return "", fmt.Errorf("env variable %s missing", key)
 	}
 
 	return val, nil

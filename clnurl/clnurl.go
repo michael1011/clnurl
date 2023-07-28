@@ -11,6 +11,17 @@ func Init(cfg *Config, backend Backend) *ClnUrl {
 	}
 }
 
+func (cu *ClnUrl) Disconnect() {
+	if cu.backend == nil {
+		return
+	}
+
+	err := cu.backend.Disconnect()
+	if err != nil {
+		fmt.Println("Could not disconnect node backend: " + err.Error())
+	}
+}
+
 func (cu *ClnUrl) MakeInvoice(msats int64) (*InvoiceResponse, error) {
 	if msats < cu.cfg.MinSendable || msats > cu.cfg.MaxSendable {
 		return nil, fmt.Errorf(

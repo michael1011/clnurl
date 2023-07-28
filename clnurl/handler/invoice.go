@@ -17,11 +17,15 @@ func HandleInvoice(getCu getClnurl, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cu, err := getCu()
+	cu, err := getCu(true)
 	if err != nil {
 		formatError(w, http.StatusInternalServerError, err)
 		return
 	}
+
+	defer func() {
+		cu.Disconnect()
+	}()
 
 	invoice, err := cu.MakeInvoice(amount)
 	if err != nil {

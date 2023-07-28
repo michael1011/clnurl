@@ -14,6 +14,7 @@ type Config struct {
 }
 
 type Backend interface {
+	Disconnect() error
 	MakeInvoice(msats int64, description string) (string, error)
 }
 

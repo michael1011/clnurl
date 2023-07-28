@@ -3,9 +3,12 @@ module github.com/michael1011/clnurl
 go 1.20
 
 require (
+	github.com/breez/breez-sdk-go v0.1.5-beta.rc2
 	github.com/btcsuite/btcutil v1.0.3-0.20210527170813-e2ba6805a890
 	github.com/elementsproject/glightning v0.0.0-20221013194807-73978c84cee8
 	github.com/fiatjaf/makeinvoice v1.5.3
+	github.com/jackc/pgx/v5 v5.4.2
+	golang.org/x/sync v0.1.0
 )
 
 require (
@@ -23,12 +26,15 @@ require (
 	github.com/btcsuite/websocket v0.0.0-20150119174127-31079b680792 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/decred/dcrd/lru v1.0.0 // indirect
+	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/fiatjaf/eclair-go v0.2.1 // indirect
 	github.com/fiatjaf/lightningd-gjson-rpc v1.4.0 // indirect
 	github.com/fiatjaf/ln-decodepay v1.0.0 // indirect
 	github.com/go-errors/errors v1.0.1 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/imroc/req v0.3.0 // indirect
+	github.com/jackc/pgpassfile v1.0.0 // indirect
+	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/jb55/lnsocket/go v0.0.0-20220315220004-e1e6b88a0bfc // indirect
 	github.com/kkdai/bstream v1.0.0 // indirect
 	github.com/lightninglabs/gozmq v0.0.0-20191113021534-d20a764486bf // indirect
@@ -39,12 +45,14 @@ require (
 	github.com/lightningnetwork/lnd/ticker v1.1.0 // indirect
 	github.com/lnpay/lnpay-go v1.1.0 // indirect
 	github.com/miekg/dns v1.1.43 // indirect
+	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/tidwall/gjson v1.8.1 // indirect
 	github.com/tidwall/match v1.0.3 // indirect
 	github.com/tidwall/pretty v1.1.0 // indirect
 	github.com/tidwall/sjson v1.1.7 // indirect
-	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
-	golang.org/x/net v0.0.0-20210913180222-943fd674d43e // indirect
-	golang.org/x/sys v0.0.0-20210915083310-ed5796bab164 // indirect
-	golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1 // indirect
+	golang.org/x/crypto v0.9.0 // indirect
+	golang.org/x/net v0.10.0 // indirect
+	golang.org/x/sys v0.8.0 // indirect
+	golang.org/x/term v0.8.0 // indirect
+	golang.org/x/text v0.9.0 // indirect
 )

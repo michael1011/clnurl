@@ -11,6 +11,10 @@ type NodeBackend struct {
 	lightning *glightning.Lightning
 }
 
+func (n *NodeBackend) Disconnect() error {
+	return nil
+}
+
 func (n *NodeBackend) MakeInvoice(msats int64, description string) (string, error) {
 	inv, err := n.lightning.Invoice(uint64(msats), makeRandomLabel(), description)
 	if err != nil {
