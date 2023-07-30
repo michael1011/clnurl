@@ -5,9 +5,10 @@ import (
 )
 
 type Backend struct {
-	db *dbSync
-
+	db  *dbSync
 	sdk *breez.BlockingBreezServices
+
+	ignoreDisconnect bool
 }
 
 type breezListener struct{}
@@ -16,7 +17,7 @@ func (breezListener) Log(breez.LogEntry) {}
 
 func (breezListener) OnEvent(breez.BreezEvent) {}
 
-func Init(postgresUrl, breezMnemonic, breezApiKey string) (*Backend, error) {
+func Init(postgresUrl, breezMnemonic, breezApiKey string, ignoreDisconnect bool) (*Backend, error) {
 	db, err := initDbSync(postgresUrl)
 	if err != nil {
 		return nil, err
@@ -41,12 +42,21 @@ func Init(postgresUrl, breezMnemonic, breezApiKey string) (*Backend, error) {
 	}
 
 	return &Backend{
-		db:  db,
-		sdk: sdk,
+		db:               db,
+		sdk:              sdk,
+		ignoreDisconnect: ignoreDisconnect,
 	}, nil
 }
 
 func (b *Backend) Disconnect() error {
+	if b.ignoreDisconnect {
+		return nil
+	}
+
+	return b.Terminate()
+}
+
+func (b *Backend) Terminate() error {
 	if err := b.db.upload(); err != nil {
 		return err
 	}
@@ -58,8 +68,12 @@ func (b *Backend) Disconnect() error {
 	return b.sdk.Disconnect()
 }
 
+func (b *Backend) NodeInfo() (breez.NodeState, error) {
+	return b.sdk.NodeInfo()
+}
+
 func (b *Backend) MakeInvoice(msats int64, description string) (string, error) {
-	inv, err := b.sdk.ReceivePayment(uint64(msats), description)
+	inv, err := b.sdk.ReceivePayment(uint64(msats/1000), description)
 	if err != nil {
 		return "", err
 	}

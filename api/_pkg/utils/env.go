@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
-	"github.com/michael1011/clnurl/api/_pkg/utils/breez"
+	"github.com/michael1011/clnurl/breez"
 	"os"
 	"strconv"
 	"strings"
@@ -122,7 +122,7 @@ func getBreezBackend() (*breez.Backend, error) {
 		return nil, err
 	}
 
-	return breez.Init(postgres, mnemonic, apiKey)
+	return breez.Init(postgres, mnemonic, apiKey, false)
 }
 
 func GetCu(needsNode bool) (*clnurl.ClnUrl, error) {

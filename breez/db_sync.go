@@ -28,6 +28,10 @@ type dbSync struct {
 }
 
 func initDbSync(con string) (*dbSync, error) {
+	if con == "" {
+		return &dbSync{}, nil
+	}
+
 	db, err := sql.Open("pgx", con)
 	if err != nil {
 		return nil, err
@@ -39,10 +43,18 @@ func initDbSync(con string) (*dbSync, error) {
 }
 
 func (db *dbSync) close() error {
+	if db.postgres == nil {
+		return nil
+	}
+
 	return db.postgres.Close()
 }
 
 func (db *dbSync) download() error {
+	if db.postgres == nil {
+		return nil
+	}
+
 	// Files exist
 	if _, err := os.Stat(sqliteFiles[0]); err == nil {
 		return nil
@@ -73,6 +85,10 @@ func (db *dbSync) download() error {
 }
 
 func (db *dbSync) upload() error {
+	if db.postgres == nil {
+		return nil
+	}
+
 	tx, err := db.postgres.BeginTx(context.Background(), nil)
 	if err != nil {
 		return err
