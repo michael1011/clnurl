@@ -46,14 +46,21 @@ unit:
 build-frontend:
 	@$(call print, "Building frontend")
 	npm run export
+	rm -r router/out 2> /dev/null || echo > /dev/null
+	cp -r out router/out
 
 build-backend:
 	@$(call print, "Building backend")
-	$(GOBUILD) -o bin/clnurl $(LDFLAGS) $(PKG)
+	$(GOBUILD) -o bin/clnurl $(LDFLAGS) $(PKG)/plugin
+
+build-breez:
+	@$(call print, "Building Breez")
+	$(GOBUILD) -o bin/breez $(LDFLAGS) $(PKG)/breez-cli
 
 build:
 	$(MAKE) build-frontend
 	$(MAKE) build-backend
+	$(MAKE) build-breez
 
 #
 # Utils

@@ -1,22 +1,20 @@
-package main
+package router
 
 import (
-	"fmt"
-	"github.com/elementsproject/glightning/glightning"
 	"github.com/michael1011/clnurl/clnurl"
 	"github.com/michael1011/clnurl/clnurl/handler"
 	"net/http"
 )
 
-var getCu = func() (*clnurl.ClnUrl, error) {
-	return cu, nil
-}
-
-func registerRoutes(cfg *config) http.Handler {
+func registerRoutes(cu *clnurl.ClnUrl, serveSite bool) http.Handler {
 	var fileHandler http.Handler
 
-	if cfg.ServeSite {
+	if serveSite {
 		fileHandler = assetHandler()
+	}
+
+	getCu := func(bool) (*clnurl.ClnUrl, error) {
+		return cu, nil
 	}
 
 	mux := InitRegexMux(fileHandler)
@@ -55,14 +53,7 @@ func registerRoutes(cfg *config) http.Handler {
 			},
 		},
 	} {
-		err := mux.Add(pattern.method, pattern.regex, pattern.handler)
-		if err != nil {
-			plugin.Log(fmt.Sprintf(
-				"Could not register route %s: %s",
-				pattern.regex,
-				err.Error(),
-			), glightning.Info)
-		}
+		_ = mux.Add(pattern.method, pattern.regex, pattern.handler)
 	}
 
 	return mux

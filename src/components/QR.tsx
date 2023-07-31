@@ -6,11 +6,11 @@ type Props = {
 };
 
 export default function QR({ content, size }: Props) {
-  const { Canvas } = useQRCode();
+  const { SVG } = useQRCode();
 
   return (
     <a href={content}>
-      <Canvas
+      <SVG
         text={content}
         options={{
           margin: 2,

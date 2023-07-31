@@ -8,6 +8,10 @@ type MakeInvoiceBackend struct {
 	mkBackend makeinvoice.BackendParams
 }
 
+func (b *MakeInvoiceBackend) Disconnect() error {
+	return nil
+}
+
 func (b *MakeInvoiceBackend) MakeInvoice(msats int64, description string) (string, error) {
 	return makeinvoice.MakeInvoice(makeinvoice.Params{
 		Msatoshi:           msats,

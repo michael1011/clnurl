@@ -4,15 +4,14 @@ import (
 	"github.com/elementsproject/glightning/glightning"
 	"github.com/michael1011/clnurl/build"
 	"github.com/michael1011/clnurl/clnurl"
+	"github.com/michael1011/clnurl/router"
 	"log"
-	"net/http"
 	"os"
 	"strconv"
 )
 
 var ln *glightning.Lightning
 var plugin *glightning.Plugin
-var cu *clnurl.ClnUrl
 
 func main() {
 	plugin = glightning.NewPlugin(onInit)
@@ -38,16 +37,13 @@ func onInit(plugin *glightning.Plugin, _ map[string]glightning.Option, config *g
 	cfg := parseConfig(plugin)
 
 	nodeBackend := &NodeBackend{lightning: ln}
-	cu = clnurl.Init(cfg.cu, nodeBackend)
+	cu := clnurl.Init(cfg.cu, nodeBackend)
 
 	addr := cfg.Host + ":" + strconv.Itoa(cfg.Port)
 	plugin.Log("Starting HTTP server on: "+addr, glightning.Info)
 
 	go func() {
-		err := http.ListenAndServe(
-			addr,
-			registerRoutes(cfg),
-		)
+		err = router.Start(cu, addr, cfg.ServeSite)
 		if err != nil {
 			plugin.Log("Starting HTTP server failed: "+err.Error(), glightning.Info)
 		}
