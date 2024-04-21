@@ -168,8 +168,8 @@ github.com/dsnet/golib v0.0.0-20171103203638-1ea166775780/go.mod h1:Lj+Z9rebOhdf
 github.com/dustin/go-humanize v1.0.0 h1:VSnTsYCnlFHaM2/igO1h6X3HA71jcobQuxemgkq4zYo=
 github.com/dustin/go-humanize v1.0.0/go.mod h1:HtrtbFcZ19U5GC7JDqmcUSB87Iq5E25KnS6fMYU6eOk=
 github.com/elazarl/go-bindata-assetfs v1.0.0/go.mod h1:v+YaWX3bdea5J/mo8dSETolEo7R71Vk1u8bnjau5yw4=
-github.com/elementsproject/glightning v0.0.0-20221013194807-73978c84cee8 h1:hGFieFW9zJavM+nQ9mKoPfPY5ag3L6JREAp0ED1W5wU=
-github.com/elementsproject/glightning v0.0.0-20221013194807-73978c84cee8/go.mod h1:YAdIeSyx8VEhDCtEaGOJLmWNpPaQ3x4vYSAj9Vrppdo=
+github.com/elementsproject/glightning v0.0.0-20240224063423-55240d61b52a h1:xnVQmVqGmSs3m8zPQF4iYEYiUAmJx8MlT9vJ3lAaOjc=
+github.com/elementsproject/glightning v0.0.0-20240224063423-55240d61b52a/go.mod h1:YAdIeSyx8VEhDCtEaGOJLmWNpPaQ3x4vYSAj9Vrppdo=
 github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.1-0.20191026205805-5f8ba28d4473/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1mIlRU8Am5FuJP05cCM98=

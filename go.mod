@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/btcsuite/btcutil v1.0.3-0.20210527170813-e2ba6805a890
-	github.com/elementsproject/glightning v0.0.0-20221013194807-73978c84cee8
+	github.com/elementsproject/glightning v0.0.0-20240224063423-55240d61b52a
 	github.com/fiatjaf/makeinvoice v1.5.3
 )
 
